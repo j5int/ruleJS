@@ -12,7 +12,8 @@ module.exports = function(config) {
     },
     webpack: {
       module: webpackConf.module,
-      devtool: "inline-source-map"
+      devtool: "inline-source-map",
+      node: webpackConf.node
     },
     webpackMiddleware: {
       noInfo: true
