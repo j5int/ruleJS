@@ -1309,4 +1309,4 @@ var ruleJS = (function (root) {
 
 });
 
-module.exports = ruleJS
+export default ruleJS
