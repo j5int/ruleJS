@@ -18,7 +18,7 @@ module.exports = function(config) {
     webpackMiddleware: {
       noInfo: true
     },
-    browsers: ['PhantomJS', 'Chrome', 'Firefox'],
+    browsers: ['PhantomJS', 'Chrome', 'Firefox', 'IE'],
     plugins: [
       require('karma-webpack'),
       require('karma-mocha'),
@@ -26,6 +26,7 @@ module.exports = function(config) {
       require('karma-phantomjs-launcher'),
       require('karma-chrome-launcher'),
       require('karma-firefox-launcher'),
+      require('karma-ie-launcher'),
       require('karma-spec-reporter')
     ],
   });
