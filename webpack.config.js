@@ -3,6 +3,7 @@ var minimize = process.argv.indexOf('--no-minimize') === -1 ? true : false;
 var plugins = minimize ? [new webpack.optimize.UglifyJsPlugin({
   minimize: true,
   compress: {
+    warnings: false,
     drop_console: true
   }
 })] : [];
@@ -14,6 +15,10 @@ module.exports = {
     filename: minimize ? 'ruleJS.all.full.min.js' : 'ruleJS.all.full.js',
     libraryTarget: 'umd',
     library: 'ruleJS'
+  },
+  node: {
+    //Jison generates a main method that refers to 'fs'
+    fs: 'empty',
   },
   module: {
     loaders: [{

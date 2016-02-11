@@ -1,3 +1,6 @@
+var Parser = require('../parser/parser.jison').parser
+var Formula = require('formulajs')
+
 var ruleJS = (function (root) {
   'use strict';
 
@@ -1305,3 +1308,5 @@ var ruleJS = (function (root) {
   };
 
 });
+
+module.exports = ruleJS
