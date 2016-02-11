@@ -524,12 +524,12 @@ describe('parse()', function () {
   });
 
   it('CUMIPMT', function () {
-    parsed = rules.parse("ROUND(CUMIPMT('0.1/12', '30*12', 100000, 13, 24, 0),5)");
+    parsed = rules.parse("ROUND(CUMIPMT(0.1/12, 30*12, 100000, 13, 24, 0),5)");
     expect(parsed.result).to.equal(-9916.77251);
   });
 
   it('CUMPRINC', function () {
-    parsed = rules.parse("ROUND(CUMPRINC('0.1/12', '30*12', 100000, 13, 24, 0),5)");
+    parsed = rules.parse("ROUND(CUMPRINC(0.1/12, 30*12, 100000, 13, 24, 0),5)");
     expect(parsed.result).to.equal(-614.08633);
   });
 
