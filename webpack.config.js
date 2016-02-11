@@ -20,7 +20,13 @@ module.exports = {
       test: /\.js?$/,
       exclude: /(node_modules|bower_components)/,
       loader: 'babel'
-    }]
+    },
+    {
+      test: /\.jison$/,
+      exclude: /(node_modules|bower_components)/,
+      loader: "jison-loader"
+    }
+    ]
   },
   plugins: plugins
 };

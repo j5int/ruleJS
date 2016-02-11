@@ -30,6 +30,7 @@
     "chai": "^3.2.0",
     "coveralls": "^2.11.4",
     "isparta": "^4.0.0",
+    "jison-loader": "^1.0.0",
     "karma": "^0.13.14",
     "karma-chrome-launcher": "^0.2.1",
     "karma-firefox-launcher": "^0.1.6",
