@@ -1,3 +1,4 @@
+var ruleJS = require('../src/ruleJS')
 var rules = new ruleJS();
 rules.init();
 

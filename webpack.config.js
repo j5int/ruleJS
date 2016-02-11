@@ -9,7 +9,7 @@ var plugins = minimize ? [new webpack.optimize.UglifyJsPlugin({
 })] : [];
 
 module.exports = {
-  entry: './src/js/ruleJS.js',
+  entry: './src/ruleJS.js',
   output: {
     path: './dist/full',
     filename: minimize ? 'ruleJS.all.full.min.js' : 'ruleJS.all.full.js',
