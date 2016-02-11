@@ -8,12 +8,12 @@ var plugins = minimize ? [new webpack.optimize.UglifyJsPlugin({
 })] : [];
 
 module.exports = {
-  entry: './src/spreadsheet-engine.js',
+  entry: './src/js/ruleJS.js',
   output: {
-    path: './dist',
-    filename: minimize ? 'spreadsheet-engine.min.js' : 'spreadsheet-engine.js',
+    path: './dist/full',
+    filename: minimize ? 'ruleJS.all.full.min.js' : 'ruleJS.all.full.js',
     libraryTarget: 'umd',
-    library: 'spreadsheetEngine'
+    library: 'ruleJS'
   },
   module: {
     loaders: [{
