@@ -1,5 +1,5 @@
-var Parser = require('./parser.jison').parser
-var Formula = require('formulajs')
+import {parser as Parser} from'./parser.jison';
+import Formula from 'formulajs';
 
 var ruleJS = (function (root) {
   'use strict';
