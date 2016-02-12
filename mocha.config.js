@@ -6,4 +6,4 @@ chai.use(sinonChai);
 global.document = {
   getElementById: function(a) { return null}
 }
-
+global.HTMLElement = function(){}

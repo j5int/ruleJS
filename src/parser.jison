@@ -67,13 +67,13 @@ expressions
 
 expression
     : variableSequence {
-        $$ = yy.handler.helper.callVariable.call(this, $1);
+        $$ = yy.handler.helper.callVariable($1);
       }
     | TIME_AMPM {
-        $$ = yy.handler.time.call(yy.obj, $1, true);
+        $$ = yy.handler.time($1, true);
       }
     | TIME_24 {
-        $$ = yy.handler.time.call(yy.obj, $1);
+        $$ = yy.handler.time($1);
       }
     | number {
         $$ = yy.handler.helper.number($1);
@@ -138,10 +138,10 @@ expression
         }
       }
     | FUNCTION '(' ')' {
-        $$ = yy.handler.helper.callFunction.call(this, $1, '');
+        $$ = yy.handler.helper.callFunction($1, '');
       }
     | FUNCTION '(' expseq ')' {
-        $$ = yy.handler.helper.callFunction.call(this, $1, $3);
+        $$ = yy.handler.helper.callFunction($1, $3);
       }
     | cell
     | error
@@ -150,16 +150,16 @@ expression
 
 cell
    : FIXEDCELL {
-      $$ = yy.handler.helper.fixedCellValue.call(yy.obj, $1);
+      $$ = yy.handler.helper.fixedCellValue($1);
     }
   | FIXEDCELL ':' FIXEDCELL {
-      $$ = yy.handler.helper.fixedCellRangeValue.call(yy.obj, $1, $3);
+      $$ = yy.handler.helper.fixedCellRangeValue($1, $3);
     }
   | CELL {
-      $$ = yy.handler.helper.cellValue.call(yy.obj, $1);
+      $$ = yy.handler.helper.cellValue($1);
     }
   | CELL ':' CELL {
-      $$ = yy.handler.helper.cellRangeValue.call(yy.obj, $1, $3);
+      $$ = yy.handler.helper.cellRangeValue($1, $3);
     }
 ;
 
