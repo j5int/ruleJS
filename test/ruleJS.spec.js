@@ -1,8 +1,17 @@
 var ruleJS = require('../src/ruleJS')
-var rules = new ruleJS();
-rules.init();
+var jsdom = require('mocha-jsdom')
+
 
 describe('ruleJS', function () {
+  jsdom()
+
+  let rules = null
+
+  before(function() {
+    rules = new ruleJS();
+    rules.init();
+  });
+
   it('should exists', function () {
     expect(rules).to.be.defined;
     expect(rules).to.be.an.instanceof(Object);
@@ -99,6 +108,16 @@ describe('ruleJS', function () {
 });
 
 describe('parse()', function () {
+
+  jsdom()
+
+  let rules = null
+
+  before(function() {
+    rules = new ruleJS();
+    rules.init();
+  });
+
   var parsed = null;
 
   beforeEach(function () {
