@@ -242,9 +242,9 @@ class Matrix {
       return result;
     }
 
-    this.data.forEach(function (item) {
+    this.data.forEach((item) => {
       if (item.deps) {
-        var deps = item.deps.filter(function (cell) {
+        var deps = item.deps.filter((cell) => {
 
           var alpha = this.utils.getCellAlphaNum(cell).alpha,
             num = this.utils.toNum(alpha);
@@ -268,9 +268,9 @@ class Matrix {
       return result;
     }
 
-    this.data.forEach(function (item) {
+    this.data.forEach((item) => {
       if (item.deps) {
-        var deps = item.deps.filter(function (cell) {
+        var deps = item.deps.filter((cell) => {
           var num = this.utils.getCellAlphaNum(cell).num;
           return num > row;
         });
@@ -340,7 +340,7 @@ class Matrix {
     var deps = this.getDependenciesByElement(id);
 
     if (deps.length) {
-      deps.forEach(function (refId) {
+      deps.forEach((refId) => {
         if (allDependencies.indexOf(refId) === -1) {
           allDependencies.push(refId);
 
@@ -370,11 +370,11 @@ class Matrix {
     var allDependencies = this.getElementDependencies(element),
         id = element.getAttribute('id');
 
-    allDependencies.forEach(function (refId) {
+    allDependencies.forEach((refId) => {
       var item = this.getItem(refId);
       if (item && item.formula) {
         var refElement = document.getElementById(refId);
-        calculateElementFormula(item.formula, refElement);
+        this.calculateElementFormula(item.formula, refElement);
       }
     });
   }
@@ -387,7 +387,7 @@ class Matrix {
    */
   calculateElementFormula(formula, element) {
     // to avoid double translate formulas, update item data in parser
-    var parsed = parse(formula, element),
+    var parsed = this.ruleJsInstance.parse(formula, element),
         value = parsed.result,
         error = parsed.error,
         nodeName = element.nodeName.toUpperCase();
@@ -420,7 +420,7 @@ class Matrix {
         formula: formula
       });
 
-      calculateElementFormula(formula, element);
+      this.calculateElementFormula(formula, element);
     }
 
   };
@@ -433,7 +433,7 @@ class Matrix {
     var id = element.getAttribute('id');
 
     // on db click show formula
-    element.addEventListener('dblclick', function () {
+    element.addEventListener('dblclick', () => {
       var item = this.getItem(id);
 
       if (item && item.formula) {
@@ -442,7 +442,7 @@ class Matrix {
       }
     });
 
-    element.addEventListener('blur', function () {
+    element.addEventListener('blur', () => {
       var item = this.getItem(id);
 
       if (item) {
@@ -455,18 +455,18 @@ class Matrix {
     });
 
     // if pressed ESC restore original value
-    element.addEventListener('keyup', function (event) {
+    element.addEventListener('keyup', (event) => {
       switch (event.keyCode) {
         case 13: // ENTER
         case 27: // ESC
           // leave cell
-          listen();
+          this.listen();
           break;
       }
     });
 
     // re-calculate formula if ref cells value changed
-    element.addEventListener('change', function () {
+    element.addEventListener('change', () => {
       // reset and remove item
       this.removeItem(id);
 
@@ -475,11 +475,11 @@ class Matrix {
 
       if (value[0] === '=') {
         element.setAttribute('data-formula', value.substr(1));
-        registerElementInMatrix(element);
+        this.registerElementInMatrix(element);
       }
 
       // get ref cells and re-calculate formulas
-      recalculateElementDependencies(element);
+      this.recalculateElementDependencies(element);
     });
   };
 
@@ -503,12 +503,12 @@ class Matrix {
    * scan the form and build the calculation matrix
    */
   scan() {
-    var $totalElements = rootElement.querySelectorAll(formElements);
+    var $totalElements = this.ruleJsInstance.rootElement.querySelectorAll(this.formElements);
 
     // iterate through elements contains specified attributes
-    [].slice.call($totalElements).forEach(function ($item) {
-      registerElementInMatrix($item);
-      registerElementEvents($item);
+    [].slice.call($totalElements).forEach(($item) => {
+      this.registerElementInMatrix($item);
+      this.registerElementEvents($item);
     });
   };
 };
@@ -660,7 +660,7 @@ class UtilsClass{
       delta = 1;
     }
 
-    return formula.replace(/(\$?[A-Za-z]+\$?[0-9]+)/g, function (match) {
+    return formula.replace(/(\$?[A-Za-z]+\$?[0-9]+)/g, (match) => {
       var alphaNum = this.getCellAlphaNum(match),
           alpha = alphaNum.alpha,
           num = alphaNum.num;
@@ -709,7 +709,7 @@ class UtilsClass{
     }
 
     if (type && counter) {
-      return formula.replace(/(\$?[A-Za-z]+\$?[0-9]+)/g, function (match) {
+      return formula.replace(/(\$?[A-Za-z]+\$?[0-9]+)/g, (match) => {
 
         var alpha = this.getCellAlphaNum(match).alpha;
 
@@ -861,7 +861,7 @@ class UtilsClass{
     for (var column = cols.start; column <= cols.end; column++) {
       for (var row = rows.start; row <= rows.end; row++) {
         var cellIndex = this.toChar(column) + (row + 1),
-            cellValue = this.ruleJsInstance.helper.cellValue.call(this, cellIndex);
+            cellValue = this.ruleJsInstance.helper.cellValue(cellIndex);
 
         result.index.push(cellIndex);
         result.value.push(cellValue);
@@ -1170,7 +1170,7 @@ class HelperClass {
         element = this;
 
     // iterate cells to get values and indexes
-    var cells = this.ruleJsInstance.utils.iterateCells.call(this, coordsStart, coordsEnd),
+    var cells = this.ruleJsInstance.utils.iterateCells(coordsStart, coordsEnd),
         result = [];
 
     // check if custom cellValue fn exists
@@ -1198,7 +1198,7 @@ class HelperClass {
    */
   fixedCellValue(id) {
     id = id.replace(/\$/g, '');
-    return this.cellValue.call(this, id);
+    return this.cellValue(id);
   }
 
   /**
@@ -1211,11 +1211,11 @@ class HelperClass {
     start = start.replace(/\$/g, '');
     end = end.replace(/\$/g, '');
 
-    return this.cellRangeValue.call(this, start, end);
+    return this.cellRangeValue(start, end);
   }
 }
 
-class ruleJS {
+class ruleJSClass {
   constructor(root) {
 
     /**
@@ -1268,7 +1268,7 @@ class ruleJS {
     if (deps.indexOf(id) !== -1) {
       result = null;
 
-      deps.forEach(function (id) {
+      deps.forEach((id) => {
         this.matrix.updateItem(id, {value: null, error: Exception.get('REF')});
       });
 
@@ -1302,7 +1302,7 @@ class ruleJS {
       //console.debug(ex.prop);
       //debugger;
       //error = ex.message;
-      //error = Exception.get('ERROR');
+    //    error = Exception.get('ERROR');
     }
 
     return {
@@ -1322,4 +1322,5 @@ class ruleJS {
   }
 }
 
+var ruleJS = ruleJSClass
 export default ruleJS
