@@ -70,10 +70,12 @@ expression
         $$ = yy.handler.helper.callVariable($1);
       }
     | TIME_AMPM {
-        $$ = yy.handler.time($1, true);
+        /* TODO: Not sure where this is defined? */
+        $$ = yy.handler.time.call(yy.element, $1, true);
       }
     | TIME_24 {
-        $$ = yy.handler.time($1);
+        /* TODO: Not sure where this is defined? */
+        $$ = yy.handler.time.call(yy.element, $1);
       }
     | number {
         $$ = yy.handler.helper.number($1);
@@ -150,16 +152,16 @@ expression
 
 cell
    : FIXEDCELL {
-      $$ = yy.handler.helper.fixedCellValue($1);
+      $$ = yy.handler.helper.fixedCellValue(yy.element, $1);
     }
   | FIXEDCELL ':' FIXEDCELL {
-      $$ = yy.handler.helper.fixedCellRangeValue($1, $3);
+      $$ = yy.handler.helper.fixedCellRangeValue(yy.element, $1, $3);
     }
   | CELL {
-      $$ = yy.handler.helper.cellValue($1);
+      $$ = yy.handler.helper.cellValue(yy.element, $1);
     }
   | CELL ':' CELL {
-      $$ = yy.handler.helper.cellRangeValue($1, $3);
+      $$ = yy.handler.helper.cellRangeValue(yy.element, $1, $3);
     }
 ;
 

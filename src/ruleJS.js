@@ -1,6 +1,6 @@
 import {parser as Parser} from'./parser.jison';
 import Formula from 'formulajs';
-var _DEBUGGING = true
+var _DEBUGGING = false
 
 var FormulaParser = function(handler) {
   var formulaLexer = function () {};
@@ -13,8 +13,8 @@ var FormulaParser = function(handler) {
 
   formulaParser.prototype = Parser;
   var newParser = new formulaParser;
-  newParser.setObj = function(obj) {
-    newParser.yy.obj = obj;
+  newParser.setElement = function(element) {
+    newParser.yy.element = element;
   };
 
   newParser.yy.parseError = function (str, hash) {
@@ -819,7 +819,7 @@ class UtilsClass{
    * @param {Function=} callback
    * @returns {{index: Array, value: Array}}
    */
-  iterateCells(startCell, endCell, callback) {
+  iterateCells(element, startCell, endCell, callback) {
     var result = {
       index: [], // list of cell index: A1, A2, A3
       value: []  // list of cell value
@@ -862,7 +862,7 @@ class UtilsClass{
     for (var column = cols.start; column <= cols.end; column++) {
       for (var row = rows.start; row <= rows.end; row++) {
         var cellIndex = this.toChar(column) + (row + 1),
-            cellValue = this.ruleJsInstance.helper.cellValue(cellIndex);
+            cellValue = this.ruleJsInstance.helper.cellValue(element, cellIndex);
 
         result.index.push(cellIndex);
         result.value.push(cellValue);
@@ -1102,10 +1102,9 @@ class HelperClass {
    * @param {String} cell => A1 AA1
    * @returns {*}
    */
-  cellValue(cell) {
+  cellValue(element, cell) {
     var value,
         fnCellValue = this.ruleJsInstance.custom.cellValue,
-        element = this,
         item = this.ruleJsInstance.matrix.getItem(cell);
 
     // check if custom cellValue fn exists
@@ -1164,14 +1163,13 @@ class HelperClass {
    * @param {String} end cell B3
    * @returns {Array}
    */
-  cellRangeValue(start, end) {
+  cellRangeValue(element, start, end) {
     var fnCellValue = this.ruleJsInstance.custom.cellValue,
         coordsStart = this.ruleJsInstance.utils.cellCoords(start),
-        coordsEnd = this.ruleJsInstance.utils.cellCoords(end),
-        element = this;
+        coordsEnd = this.ruleJsInstance.utils.cellCoords(end);
 
     // iterate cells to get values and indexes
-    var cells = this.ruleJsInstance.utils.iterateCells(coordsStart, coordsEnd),
+    var cells = this.ruleJsInstance.utils.iterateCells(element, coordsStart, coordsEnd),
         result = [];
 
     // check if custom cellValue fn exists
@@ -1197,9 +1195,9 @@ class HelperClass {
    * @param {String} id
    * @returns {*}
    */
-  fixedCellValue(id) {
+  fixedCellValue(element, id) {
     id = id.replace(/\$/g, '');
-    return this.cellValue(id);
+    return this.cellValue(element, id);
   }
 
   /**
@@ -1208,11 +1206,11 @@ class HelperClass {
    * @param {String} end
    * @returns {Array}
    */
-  fixedCellRangeValue(start, end) {
+  fixedCellRangeValue(element, start, end) {
     start = start.replace(/\$/g, '');
     end = end.replace(/\$/g, '');
 
-    return this.cellRangeValue(start, end);
+    return this.cellRangeValue(element, start, end);
   }
 }
 
@@ -1253,7 +1251,7 @@ class ruleJSClass {
    * @private
      */
   _parse(formula, element) {
-    this.parser.setObj(element);
+    this.parser.setElement(element);
     let result = this.parser.parse(formula);
 
     var id;
