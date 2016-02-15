@@ -109,9 +109,11 @@ describe('parse()', function () {
     it('operator: =', function () {
       parsed = rules.parse('10=10');
       expect(parsed.result).to.equal(true);
+      expect(parsed.error).to.be.null;
 
       parsed = rules.parse('10=-10');
       expect(parsed.result).to.equal(false);
+      expect(parsed.error).to.be.null;
     });
 
 
@@ -882,5 +884,27 @@ describe('parse()', function () {
   it('XOR', function () {
     parsed = rules.parse("XOR(true, false, true)");
     expect(parsed.result).to.equal(false);
+  });
+
+  describe('time', function () {
+    it('time AM', function () {
+      parsed = rules.parse('6:00 AM');
+      expect(parsed.error).to.be.null;
+    });
+
+    it('time 24h (AM)', function () {
+      parsed = rules.parse('6:00');
+      expect(parsed.error).to.be.null;
+    });
+
+    it('time PM', function () {
+      parsed = rules.parse('6:00 PM');
+      expect(parsed.error).to.be.null;
+    });
+
+    it('time 24h (PM)', function () {
+      parsed = rules.parse('18:00');
+      expect(parsed.error).to.be.null;
+    });
   });
 });
