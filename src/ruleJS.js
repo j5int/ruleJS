@@ -1,5 +1,6 @@
 import {parser as Parser} from'./parser.jison';
 import Formula from 'formulajs';
+var _DEBUGGING = true
 
 var FormulaParser = function(handler) {
   var formulaLexer = function () {};
@@ -1287,22 +1288,23 @@ class ruleJSClass {
     var result = null,
         error = null;
 
-    try {
+    if (_DEBUGGING) {
       result = this._parse(formula, element)
-    } catch (ex) {
+    }
+    else {
 
-      var message = Exception.get(ex.message);
+      try {
+        result = this._parse(formula, element)
+      } catch (ex) {
 
-      if (message) {
-        error = message;
-      } else {
-        error = Exception.get('ERROR');
+        var message = Exception.get(ex.message);
+
+        if (message) {
+          error = message;
+        } else {
+          error = Exception.get('ERROR');
+        }
       }
-
-      //console.debug(ex.prop);
-      //debugger;
-      //error = ex.message;
-    //    error = Exception.get('ERROR');
     }
 
     return {
